@@ -31,6 +31,7 @@ controller.step(
 )
 controller.step('PausePhysicsAutoSim')
 controller.step(action='DropHandObject')
+controller.step('AdvancePhysicsStep', timestep=.01)
 
 dir = np.random.rand(3)
 dir /= np.linalg.norm(dir)
