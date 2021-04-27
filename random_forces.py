@@ -70,8 +70,6 @@ def apply_random_force(controller, obj):
 
 
 if __name__ == '__main__':
-    import sys
-    print(sys.argv[1])
     train_kitchens = [f'FloorPlan{i}' for i in range(1, 21)]
     controller = Controller(scene=random.choice(train_kitchens))
     obj = get_random_pickupable(controller)
@@ -90,5 +88,5 @@ if __name__ == '__main__':
     df = pd.DataFrame(df)
     
     import time
-    timestr = strftime('%Y%m%d-%H%M%S')
+    timestr = time.strftime('%Y%m%d-%H%M%S')
     df.to_json(f'data/{timestr}.json', orient='index')
