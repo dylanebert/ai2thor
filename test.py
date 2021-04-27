@@ -33,15 +33,9 @@ controller.step(
 print(obj['position'])
 obj = update_to_current_frame(obj)
 print(obj['position'])
-
-query = controller.step(
-    action='GetObjectInFrame',
-    x=.5,
-    y=.5,
-    forceAction=False
-)
-if query:
-    print(query.metadata['actionReturn'])
+controller.step(action='DropHandObject')
+obj = update_to_current_frame(obj)
+print(obj['position'])
 
 
 '''for i in range(100):
