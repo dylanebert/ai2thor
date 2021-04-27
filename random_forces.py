@@ -21,7 +21,7 @@ def update_to_current_frame(controller, obj):
 
 
 def apply_random_force(controller, obj):
-    controller.step('UnpausePhysicsAutoSim')
+    controller.step('RotateRight', np.random.rand() * 360)
     controller.step(
         action='PickupObject',
         objectId=obj['objectId'],
@@ -71,7 +71,8 @@ def apply_random_force(controller, obj):
 if __name__ == '__main__':
     import sys
     fname = sys.argv[1]
-    controller = Controller(scene="FloorPlan10")
+    train_kitchens = [f'FloorPlan{i}' for i in range(1, 21)]
+    controller = Controller(scene=random.choice(train_kitchens))
     obj = get_random_pickupable(controller)
     data = apply_random_force(controller, obj)
     df = []
