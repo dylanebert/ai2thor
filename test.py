@@ -30,8 +30,17 @@ controller.step(
     manualInteract=False
 )
 controller.step('PausePhysicsAutoSim')
-controller.step(action='DropHandObject')
+controller.step('DropHandObject')
 controller.step('AdvancePhysicsStep', timestep=.01)
+
+
+query = controller.step(
+    action='GetObjectInFrame',
+    x=.5,
+    y=.5,
+)
+print(query.metadata['actionReturn'])
+
 
 dir = np.random.rand(3)
 dir /= np.linalg.norm(dir)
@@ -45,12 +54,12 @@ event = controller.step(
         'z': dir[2]
     },
     moveMagnitude=100,
-    handDistance=1.5
+    handDistance=10
 )
 print(event.metadata['actionReturn'])
 obj = update_to_current_frame(obj)
 print(obj['position'])
 for i in range(100):
-    controller.step(action='AdvancePhysicsStep', timestep=.05)
+    controller.step('AdvancePhysicsStep', timestep=.05)
 obj = update_to_current_frame(obj)
 print(obj['position'])
