@@ -71,7 +71,7 @@ def apply_random_force(controller, obj):
 
 if __name__ == '__main__':
     import sys
-    fname = sys.argv[1]
+    print(sys.argv[1])
     train_kitchens = [f'FloorPlan{i}' for i in range(1, 21)]
     controller = Controller(scene=random.choice(train_kitchens))
     obj = get_random_pickupable(controller)
@@ -88,4 +88,7 @@ if __name__ == '__main__':
             'rotZ': row['rotation']['z']
         })
     df = pd.DataFrame(df)
-    df.to_json('data/{}.json'.format(fname), orient='index')
+    
+    import time
+    timestr = strftime('%Y%m%d-%H%M%S')
+    df.to_json(f'data/{timestr}.json', orient='index')
