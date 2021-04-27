@@ -20,6 +20,7 @@ def update_to_current_frame(controller, obj):
 
 
 def apply_random_force(controller, obj):
+    controller.step('UnpausePhysicsAutoSim')
     controller.step(
         action='PickupObject',
         objectId=obj['objectId'],
@@ -36,7 +37,7 @@ def apply_random_force(controller, obj):
     event = controller.step(
         action='TouchThenApplyForce',
         x=.5,
-        y=.5,
+        y=.6,
         direction={
             'x': dir[0],
             'y': dir[1],
