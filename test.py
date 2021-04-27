@@ -22,44 +22,40 @@ def update_to_current_frame(obj):
             return candidate
 
 
-obj = get_random_pickupable()
-controller.step(
-    action='PickupObject',
-    objectId=obj['objectId'],
-    forceAction=True,
-    manualInteract=False
-)
-controller.step('PausePhysicsAutoSim')
-controller.step('DropHandObject')
-controller.step('AdvancePhysicsStep', timestep=.01)
+def apply_random_force(obj):
+    controller.step(
+        action='PickupObject',
+        objectId=obj['objectId'],
+        forceAction=True,
+        manualInteract=False
+    )
+    controller.step('PausePhysicsAutoSim')
+    controller.step('DropHandObject')
+    controller.step('AdvancePhysicsStep', timestep=.01)
 
+    dir = np.random.rand(3)
+    dir /= np.linalg.norm(dir)
+    force = np.random.rand() * 100
+    event = controller.step(
+        action='TouchThenApplyForce',
+        x=.5,
+        y=.5,
+        direction={
+            'x': dir[0],
+            'y': dir[1],
+            'z': dir[2]
+        },
+        moveMagnitude=force,
+        handDistance=10
+    )
+    assert event.metadata['actionReturn']['objectId'] == obj['objectId']
+    obj = update_to_current_frame(obj)
+    print(obj['position'])
+    for i in range(100):
+        controller.step('AdvancePhysicsStep', timestep=.05)
+    obj = update_to_current_frame(obj)
+    print(obj['position'])
 
-query = controller.step(
-    action='GetObjectInFrame',
-    x=.5,
-    y=.5,
-)
-print(query.metadata['actionReturn'])
-
-
-dir = np.random.rand(3)
-dir /= np.linalg.norm(dir)
-event = controller.step(
-    action='TouchThenApplyForce',
-    x=.5,
-    y=.5,
-    direction={
-        'x': dir[0],
-        'y': dir[1],
-        'z': dir[2]
-    },
-    moveMagnitude=100,
-    handDistance=10
-)
-print(event.metadata['actionReturn'])
-obj = update_to_current_frame(obj)
-print(obj['position'])
-for i in range(100):
-    controller.step('AdvancePhysicsStep', timestep=.05)
-obj = update_to_current_frame(obj)
-print(obj['position'])
+for i in range(10):
+    obj = get_random_pickupable()
+    apply_random_force(obj)
