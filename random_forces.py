@@ -62,6 +62,7 @@ if __name__ == '__main__':
     while not done:
         obj = get_random_pickupable(controller)
         data = apply_random_force(controller, obj)
+        print(data)
         if not data == []:
             done = True
     print(data)
