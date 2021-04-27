@@ -24,20 +24,18 @@ def update_to_current_frame(obj):
 
 
 obj = get_random_pickupable()
-print(obj['position'])
-
 controller.step(
-    action='PushObject',
+    action='PickupObject',
     objectId=obj['objectId'],
-    moveMagnitude='100',
-    forceAction=True
+    forceAction=True,
+    manualInteract=False
 )
-for i in range(100):
+obj = update_to_current_frame(obj)
+print(obj)
+
+
+'''for i in range(100):
     controller.step(
         action='AdvancePhysicsStep',
         timestep=.05
-    )
-
-
-obj = update_to_current_frame(obj)
-print(obj['position'])
+    )'''
