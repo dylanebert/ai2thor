@@ -34,7 +34,7 @@ controller.step(action='DropHandObject')
 
 dir = np.random.rand(3)
 dir /= np.linalg.norm(dir)
-controller.step(
+event = controller.step(
     action='TouchThenApplyForce',
     x=.5,
     y=.5,
@@ -46,9 +46,10 @@ controller.step(
     moveMagnitude=100,
     handDistance=1.5
 )
+print(event.metadata['actionReturn'])
 obj = update_to_current_frame(obj)
 print(obj['position'])
-for i in range(10):
+for i in range(100):
     controller.step(action='AdvancePhysicsStep', timestep=.05)
 obj = update_to_current_frame(obj)
 print(obj['position'])
