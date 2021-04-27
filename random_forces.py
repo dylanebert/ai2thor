@@ -35,20 +35,24 @@ def apply_random_force(controller, obj):
     dir = np.random.rand(3)
     dir /= np.linalg.norm(dir)
     force = np.random.rand() * 100
-    event = controller.step(
-        action='TouchThenApplyForce',
-        x=.5,
-        y=.6,
-        direction={
-            'x': dir[0],
-            'y': dir[1],
-            'z': dir[2]
-        },
-        moveMagnitude=force,
-        handDistance=10
-    )
-    if not event.metadata['actionReturn']['objectId'] == obj['objectId']:
-        return []
+    found = False
+    for y in np.arange(0., 1., .01):
+        event = controller.step(
+            action='TouchThenApplyForce',
+            x=.5,
+            y=y,
+            direction={
+                'x': dir[0],
+                'y': dir[1],
+                'z': dir[2]
+            },
+            moveMagnitude=force,
+            handDistance=10
+        )
+        if event.metadata['actionReturn']['objectId'] == obj['objectId']:
+            found = True
+            break
+    assert found
 
     data = []
     for i in tqdm(range(500)):
@@ -63,12 +67,8 @@ if __name__ == '__main__':
     import sys
     fname = sys.argv[1]
     controller = Controller(scene="FloorPlan10")
-    done = False
-    while not done:
-        obj = get_random_pickupable(controller)
-        data = apply_random_force(controller, obj)
-        if not data == []:
-            done = True
+    obj = get_random_pickupable(controller)
+    data = apply_random_force(controller, obj)
     df = []
     for row in data:
         df.append({
