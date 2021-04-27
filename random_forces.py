@@ -2,6 +2,7 @@ from ai2thor.controller import Controller
 import numpy as np
 import pandas as pd
 import random
+from tqdm import tqdm
 
 
 def get_random_pickupable(controller):
@@ -50,7 +51,7 @@ def apply_random_force(controller, obj):
         return []
 
     data = []
-    for i in range(1000):
+    for i in tqdm(range(500)):
         controller.step('AdvancePhysicsStep', timestep=.01)
         obj = update_to_current_frame(controller, obj)
         data.append(obj)
