@@ -36,34 +36,35 @@ def apply_random_force(controller, obj):
     dir /= np.linalg.norm(dir)
     force = np.random.rand() * 100
     found = False
-    for y in np.arange(0., 1., .01):
-        event = controller.step(
-            action='TouchThenApplyForce',
-            x=.5,
-            y=y,
-            direction={
-                'x': dir[0],
-                'y': dir[1],
-                'z': dir[2]
-            },
-            moveMagnitude=force,
-            handDistance=10
-        )
-        if event.metadata['actionReturn']['objectId'] == obj['objectId']:
-            found = True
-            break
+    for y in np.arange(0., .5, .01):
+        for sign in [-1, 1]:
+            event = controller.step(
+                action='TouchThenApplyForce',
+                x=.5,
+                y=.5 + y * sign,
+                direction={
+                    'x': dir[0],
+                    'y': dir[1],
+                    'z': dir[2]
+                },
+                moveMagnitude=force,
+                handDistance=10
+            )
+            if event.metadata['actionReturn']['objectId'] == obj['objectId']:
+                found = True
+                break
     assert found
 
     data = []
     prev_pos = np.zeros((3,))
-    for i in tqdm(range(1000)):
+    for i in range(1000):
         controller.step('AdvancePhysicsStep', timestep=.01)
         obj = update_to_current_frame(controller, obj)
         pos = np.array([obj['position']['x'], obj['position']['y'], obj['position']['z']])
         motion = np.linalg.norm(pos - prev_pos)
         prev_pos = pos
         data.append(obj)
-        if motion < 1e-3:
+        if motion < 1e-4:
             break
     return data
 
