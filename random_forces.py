@@ -21,7 +21,7 @@ def update_to_current_frame(controller, obj):
 
 
 def apply_random_force(controller, obj):
-    controller.step('RotateRight', np.random.rand() * 360)
+    controller.step('RotateRight', degrees=np.random.rand() * 360)
     controller.step(
         action='PickupObject',
         objectId=obj['objectId'],
