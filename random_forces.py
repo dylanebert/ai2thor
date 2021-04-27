@@ -55,11 +55,14 @@ def apply_random_force(controller, obj):
     assert found
 
     data = []
+    prev_pos = np.zeros((3,))
     for i in tqdm(range(500)):
         controller.step('AdvancePhysicsStep', timestep=.01)
         obj = update_to_current_frame(controller, obj)
+        pos = np.array([obj['position']['x'], obj['position']['y'], obj['position']['z']])
+        motion = np.linalg.norm(pos - prev_pos)
         data.append(obj)
-        print(i)
+        print(motion)
     return data
 
 
