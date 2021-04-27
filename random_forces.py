@@ -4,10 +4,7 @@ import pandas as pd
 import random
 
 
-controller = Controller(scene="FloorPlan10")
-
-
-def get_random_pickupable():
+def get_random_pickupable(controller):
     candidates = []
     for obj in controller.last_event.metadata['objects']:
         if obj['pickupable']:
@@ -15,14 +12,14 @@ def get_random_pickupable():
     return random.choice(candidates)
 
 
-def update_to_current_frame(obj):
+def update_to_current_frame(controller, obj):
     name = obj['name']
     for candidate in controller.last_event.metadata['objects']:
         if candidate['name'] == name:
             return candidate
 
 
-def apply_random_force(obj):
+def apply_random_force(controller, obj):
     controller.step(
         action='PickupObject',
         objectId=obj['objectId'],
@@ -48,14 +45,23 @@ def apply_random_force(obj):
         moveMagnitude=force,
         handDistance=10
     )
-    assert event.metadata['actionReturn']['objectId'] == obj['objectId']
-    obj = update_to_current_frame(obj)
-    print(obj['position'])
-    for i in range(100):
-        controller.step('AdvancePhysicsStep', timestep=.05)
-    obj = update_to_current_frame(obj)
-    print(obj['position'])
+    if not event.metadata['actionReturn']['objectId'] == obj['objectId']:
+        return []
 
-for i in range(10):
-    obj = get_random_pickupable()
-    apply_random_force(obj)
+    data = []
+    for i in range(1000):
+        controller.step('AdvancePhysicsStep', timestep=.01)
+        obj = update_to_current_frame(controller, obj)
+        data.append(obj)
+    return data
+
+
+if __name__ == '__main__':
+    controller = Controller(scene="FloorPlan10")
+    done = False
+    while not done:
+        obj = get_random_pickupable(controller)
+        data = apply_random_force(controller, obj)
+        if not data == []:
+            done = True
+    print(data)
