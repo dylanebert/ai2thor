@@ -5,7 +5,6 @@ import random
 
 
 controller = Controller(scene="FloorPlan10")
-#controller.step('PausePhysicsAutoSim')
 
 
 def get_random_pickupable():
@@ -30,16 +29,26 @@ controller.step(
     forceAction=True,
     manualInteract=False
 )
-print(obj['position'])
-obj = update_to_current_frame(obj)
-print(obj['position'])
+controller.step('PausePhysicsAutoSim')
 controller.step(action='DropHandObject')
+
+dir = np.random.rand(3)
+dir /= np.linalg.norm(dir)
+controller.step(
+    action='TouchThenApplyForce',
+    x=.5,
+    y=.5,
+    direction={
+        'x': dir[0],
+        'y': dir[1],
+        'z': dir[2]
+    },
+    moveMagnitude=100,
+    handDistance=infinity
+)
 obj = update_to_current_frame(obj)
 print(obj['position'])
-
-
-'''for i in range(100):
-    controller.step(
-        action='AdvancePhysicsStep',
-        timestep=.05
-    )'''
+for i in range(10):
+    controller.step(action='AdvancePhysicsStep', timestep=.05)
+obj = update_to_current_frame(obj)
+print(obj['position'])
