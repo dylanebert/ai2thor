@@ -5,7 +5,7 @@ import random
 
 
 controller = Controller(scene="FloorPlan10")
-controller.step('PausePhysicsAutoSim')
+#controller.step('PausePhysicsAutoSim')
 
 
 def get_random_pickupable():
@@ -30,8 +30,9 @@ controller.step(
     forceAction=True,
     manualInteract=False
 )
+print(obj['position'])
 obj = update_to_current_frame(obj)
-print(obj)
+print(obj['position'])
 
 
 '''for i in range(100):
