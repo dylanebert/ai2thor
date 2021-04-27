@@ -44,7 +44,7 @@ controller.step(
         'z': dir[2]
     },
     moveMagnitude=100,
-    handDistance=infinity
+    handDistance=1.5
 )
 obj = update_to_current_frame(obj)
 print(obj['position'])
