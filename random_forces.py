@@ -61,6 +61,7 @@ def apply_random_force(controller, obj):
         obj = update_to_current_frame(controller, obj)
         pos = np.array([obj['position']['x'], obj['position']['y'], obj['position']['z']])
         motion = np.linalg.norm(pos - prev_pos)
+        prev_pos = pos
         data.append(obj)
         print(motion)
     return data
