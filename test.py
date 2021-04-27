@@ -24,14 +24,20 @@ def update_to_current_frame(obj):
 
 
 obj = get_random_pickupable()
-dir = np.random.rand(3)
-dir /= np.linalg.norm(dir)
 print(obj['position'])
+
 controller.step(
     action='PushObject',
     objectId=obj['objectId'],
     moveMagnitude='100',
     forceAction=True
 )
+for i in range(100):
+    controller.step(
+        action='AdvancePhysicsStep',
+        timestep=.05
+    )
+
+
 obj = update_to_current_frame(obj)
 print(obj['position'])
