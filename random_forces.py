@@ -60,6 +60,9 @@ def apply_random_force(controller, obj):
 
 
 if __name__ == '__main__':
+    import sys
+    fname = sys.argv[1]
+
     controller = Controller(scene="FloorPlan10")
     done = False
     while not done:
@@ -79,4 +82,4 @@ if __name__ == '__main__':
             'rotZ': row['rotation']['z']
         })
     df = pd.DataFrame(df)
-    print(df)
+    df.to_json(fname, orient='index')
