@@ -60,26 +60,24 @@ def apply_random_force(controller, obj):
 
 
 if __name__ == '__main__':
-    import sys
-    fname = sys.argv[1]
-
-    controller = Controller(scene="FloorPlan10")
-    done = False
-    while not done:
-        obj = get_random_pickupable(controller)
-        data = apply_random_force(controller, obj)
-        if not data == []:
-            done = True
-    df = []
-    for row in data:
-        df.append({
-            'name': row['name'],
-            'posX': row['position']['x'],
-            'posY': row['position']['y'],
-            'posZ': row['position']['z'],
-            'rotX': row['rotation']['x'],
-            'rotY': row['rotation']['y'],
-            'rotZ': row['rotation']['z']
-        })
-    df = pd.DataFrame(df)
-    df.to_json(fname, orient='index')
+    for i in range(100):
+        controller = Controller(scene="FloorPlan10")
+        done = False
+        while not done:
+            obj = get_random_pickupable(controller)
+            data = apply_random_force(controller, obj)
+            if not data == []:
+                done = True
+        df = []
+        for row in data:
+            df.append({
+                'name': row['name'],
+                'posX': row['position']['x'],
+                'posY': row['position']['y'],
+                'posZ': row['position']['z'],
+                'rotX': row['rotation']['x'],
+                'rotY': row['rotation']['y'],
+                'rotZ': row['rotation']['z']
+            })
+        df = pd.DataFrame(df)
+        df.to_json('data/{}.json'.format(i), orient='index')
