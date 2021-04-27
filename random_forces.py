@@ -53,6 +53,7 @@ def apply_random_force(controller, obj):
         controller.step('AdvancePhysicsStep', timestep=.01)
         obj = update_to_current_frame(controller, obj)
         data.append(obj)
+        print(i)
     return data
 
 
