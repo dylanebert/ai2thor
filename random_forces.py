@@ -56,14 +56,15 @@ def apply_random_force(controller, obj):
 
     data = []
     prev_pos = np.zeros((3,))
-    for i in tqdm(range(500)):
+    for i in tqdm(range(1000)):
         controller.step('AdvancePhysicsStep', timestep=.01)
         obj = update_to_current_frame(controller, obj)
         pos = np.array([obj['position']['x'], obj['position']['y'], obj['position']['z']])
         motion = np.linalg.norm(pos - prev_pos)
         prev_pos = pos
         data.append(obj)
-        print(motion)
+        if motion < 1e-3:
+            break
     return data
 
 
